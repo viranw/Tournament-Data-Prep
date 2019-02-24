@@ -1,21 +1,22 @@
-function mdi_all() {
+function mdi_all() { // Shell function to execute all of the MDI commands at once
     mdi_institutions()
     mdi_adjudicators()
     mdi_speakers()
 }
 
-function mdiPrep() {
+function mdiPrep() { // Shell function to clean tournament data prior to import (in case it hasn't already been done)
     updatePhones()
     clearRogueSpaces()
 }
 
-function mdi_clearColours() {
+function mdi_clearColours() { // Reset tab colours
     SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - institutions").setTabColor("#ffff00")
     SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - adjudicators").setTabColor("#ffff00")
     SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - speakers").setTabColor("#ffff00")
 }
 
 function mdi_institutions() {
+    // Initial range definition
     var teaminstitutions = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Teams").getRange("J4:J30").getValues()
     var adjinstitutions = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Adjudicators").getRange("C4:C29").getValues()
     var outputRange = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - institutions").getRange("A2:A100")
@@ -23,6 +24,7 @@ function mdi_institutions() {
     var institutions = []
     var usedInstitutions = []
     
+    // Push unique institutions for output
     for (var t=0;t<teaminstitutions.length;t++) {
         var i = teaminstitutions[t][0]
         if (i != "" && usedInstitutions.indexOf(i) == -1) {
@@ -39,7 +41,7 @@ function mdi_institutions() {
         }
     }
     
-    // Pad out
+    // Pad out matrix with blank rows
     var outputValues = outputRange.getValues()
     for (var r=institutions.length;r<outputValues.length;r++) {
         institutions.push([""])
@@ -84,7 +86,7 @@ function mdi_adjudicators() {
         }
     }
     
-    // Pad Out
+    // Pad out matrix with blank rows
     var outputValues = outputRange.getValues()
     for (var r=output.length;r<outputValues.length;r++) {
         output.push(["","","","","","","","",""])
@@ -134,7 +136,7 @@ function mdi_speakers() {
         }
     }
     
-    // Pad Out
+    // Pad out matrix with blank rows
     var outputValues = outputRange.getValues()
     for (var r=output.length;r<outputValues.length;r++) {
         output.push(["","","","","","",""])
