@@ -76,6 +76,9 @@ function mdi_adjudicators() {
   mdiPrep()
   var recordedInstitutions = getInstitutions()
   var recordedNames = getRegisteredNames()
+  for (var n=0;n<recordedNames.length;n++) {
+    recordedNames[n] = recordedNames[n].toLowerCase()
+  }
   
   outputRange.clearContent()
   
@@ -84,6 +87,7 @@ function mdi_adjudicators() {
   for (var a=0;a<adjs.length;a++) {
     var aRow = adjs[a]
     var name = aRow[0]
+    var lcname = name.toLowerCase()
     var institution = aRow[1]
     var prevInstString = aRow[2]
     if (aRow[3] != "") { var test = aRow[3] } else { var test = "2.5" }
@@ -96,7 +100,7 @@ function mdi_adjudicators() {
     //Email, phone, gender
     for (var r=0;r<data.length;r++) {
       var dRow = data[r]
-      if (dRow[0] == name) {
+      if (dRow[0].toLowerCase() == name) {
         email = dRow[1]
         phone = dRow[2]
         // No gender for this tournament
@@ -126,7 +130,7 @@ function mdi_adjudicators() {
     }
     
     // Flag non-registration
-    if (recordedNames.indexOf(name) == -1) {
+    if (recordedNames.indexOf(lcname) == -1) {
       Logger.log("Adjudicator "+name+" has not registered.")
     }
   }
@@ -154,6 +158,9 @@ function mdi_speakers() {
   mdiPrep()
   var recordedInstitutions = getInstitutions()
   var recordedNames = getRegisteredNames()
+  for (var n=0;n<recordedNames.length;n++) {
+    recordedNames[n] = recordedNames[n].toLowerCase()
+  }
   
   outputRange.clearContent()
   
@@ -187,11 +194,12 @@ function mdi_speakers() {
     if (fullName != "" || speakers.length > 0) {
       for (var s=0;s<speakers.length;s++) {
         var name = speakers[s]
+        var lcname = name.toLowerCase()
         var email = ""
         //Email, phone, gender
         for (var r=0;r<data.length;r++) {
           var dRow = data[r]
-          if (dRow[0] == name) {
+          if (dRow[0].toLowerCase() == lcname) {
             email = dRow[1]
             // No gender for this tournament
           }
@@ -199,7 +207,7 @@ function mdi_speakers() {
         output.push([name, email, "", institution, fullName, shortName, codeName, "FALSE"]) // No gender, default no-institution-prefix
         
         // Flag non-registration
-        if (recordedNames.indexOf(name) == -1) {
+        if (recordedNames.indexOf(lcname) == -1) {
           Logger.log("Speaker "+name+" has not registered.")
         }
       }
