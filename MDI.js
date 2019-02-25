@@ -1,9 +1,3 @@
-function mdi_all() { // Shell function to execute all of the MDI commands at once
-  mdi_institutions()
-  mdi_adjudicators()
-  mdi_speakers()
-}
-
 function mdiPrep() { // Shell function to clean tournament data prior to import (in case it hasn't already been done)
   mdi_institutions()
 }
@@ -75,7 +69,7 @@ function getRegisteredNames() {
 
 function mdi_adjudicators() {
   Logger.clear()
-  var adjs = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Adjudicators").getRange("B4:F29").getValues()
+  var adjs = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Adjudicators").getRange("B4:G29").getValues()
   var data = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration Data").getRange("B2:D150").getValues()
   var outputRange = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - adjudicators").getRange("A2:I1000")
   
@@ -86,15 +80,15 @@ function mdi_adjudicators() {
   outputRange.clearContent()
   
   var output = []
-  
+ 
   for (var a=0;a<adjs.length;a++) {
     var aRow = adjs[a]
     var name = aRow[0]
     var institution = aRow[1]
-    //var prevInstString = aRow[2]
-    if (aRow[2] != "") { var test = aRow[2] } else { var test = "2.5" }
-    var ac = aRow[3]
-    var ind = aRow[4]
+    var prevInstString = aRow[2]
+    if (aRow[3] != "") { var test = aRow[3] } else { var test = "2.5" }
+    var ac = aRow[4]
+    var ind = aRow[5]
     
     var email = ""
     var phone = ""
@@ -116,7 +110,6 @@ function mdi_adjudicators() {
     }
     
     // Previous institutions
-    /**
     var prev = []
     var prevToValidate = prevInstString.split(",")
     for (var i=0;i<prevToValidate.length;i++) {
@@ -127,10 +120,9 @@ function mdi_adjudicators() {
       }
     }
     var validatedPrev = prev.join(",")
-    **/
     
     if (name != "") {
-      output.push([name, email, "", phone, institution, ac, ind, test, ""]) // No gender or institutional conflicts
+      output.push([name, email, "", phone, institution, ac, ind, test, validatedPrev]) // No gender
     }
     
     // Flag non-registration
