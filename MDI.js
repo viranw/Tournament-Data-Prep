@@ -72,6 +72,7 @@ function mdi_adjudicators() {
   var adjs = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Adjudicators").getRange("B4:G29").getValues()
   var data = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration Data").getRange("B2:D150").getValues()
   var outputRange = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - adjudicators").getRange("A2:I1000")
+  var log = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Program Log")
   
   mdiPrep()
   var recordedInstitutions = getInstitutions()
@@ -120,7 +121,7 @@ function mdi_adjudicators() {
       if (recordedInstitutions.indexOf(prevToValidate[i]) != -1) {
         prev.push(prevToValidate)
       } else {
-      Logger.log("Past institution for "+name+" ("+prevToValidate[i]+") is not recorded.")
+        Logger.log("Past institution for "+name+" ("+institution+", formerly "+prevToValidate[i]+") is not recorded.")
       }
     }
     var validatedPrev = prev.join(",")
@@ -143,7 +144,15 @@ function mdi_adjudicators() {
   
   outputRange.setValues(output)
   SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - adjudicators").setTabColor("#00ff00")
-  var finished = SpreadsheetApp.getUi().alert("Flags", Logger.getLog(),SpreadsheetApp.getUi().ButtonSet.OK)
+  
+  // Logging
+  var logSplit = Logger.getLog().split("\n")
+  var logOutput = []
+  for (var l=0;l<logSplit.length;l++) {
+    log.appendRow(logSplit[l].split(": "))
+  }
+  
+  var finished = SpreadsheetApp.getUi().alert("Confirmation", "Processing Complete. Refer to the Program Log for flags and errors.",SpreadsheetApp.getUi().ButtonSet.OK)
   
   
 }
@@ -154,6 +163,7 @@ function mdi_speakers() {
   var teams = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Teams").getRange("D4:M30").getValues()
   var data = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration Data").getRange("B2:D150").getValues()
   var outputRange = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - speakers").getRange("A2:H1000")
+  var log = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Program Log")
   
   mdiPrep()
   var recordedInstitutions = getInstitutions()
@@ -223,6 +233,12 @@ function mdi_speakers() {
   outputRange.setValues(output)
   SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Tab MDI - speakers").setTabColor("#00ff00")
   
-  var finished = SpreadsheetApp.getUi().alert("Flags", Logger.getLog(),SpreadsheetApp.getUi().ButtonSet.OK)
+  // Logging
+  var logSplit = Logger.getLog().split("\n")
+  var logOutput = []
+  for (var l=0;l<logSplit.length;l++) {
+    log.appendRow(logSplit[l].split(": "))
+  }
   
+  var finished = SpreadsheetApp.getUi().alert("Confirmation", "Processing Complete. Refer to the Program Log for flags and errors.",SpreadsheetApp.getUi().ButtonSet.OK)
 }
